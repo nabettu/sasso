@@ -26,10 +26,9 @@ function moveCenter(overlay, latlng) {
     panorama.setLocationAndPOV(latlng);
 }
 
-
 $(function() {
     GUnload();
-    $("body").css("height", $(window).height() + 2 + "px")
+    $("body").css("height", $(window).height() + 2 + "px");
     $(window).scrollTop(1);
 });
 
@@ -39,5 +38,4 @@ $(window).on('load', function(event) {
 
 $(window).on('scroll', function(event) {
     $(window).scrollTop(1);
-    console.log('window');
 });
