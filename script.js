@@ -37,8 +37,7 @@ $(function() {
             path: 'skate.mp3'
         }]
     };
-    boombox.load('sound', options, function(err, audio) {
-    });
+    boombox.load('sound', options, function(err, audio) {});
 });
 
 $(window).on('load', function(event) {
@@ -48,9 +47,13 @@ $(window).on('load', function(event) {
 $(window).on('scroll', function(event) {
     $(window).scrollTop(1);
 
-    sv.getPanoramaById(panorama.links[1].pano, function(data) {
+    if (panorama.links[0].heading < panorama.links[1].heading) var no = 0;
+    else var no = 1;
+
+    sv.getPanoramaById(panorama.links[no].pano, function(data) {
         panorama.setPosition(data.location.latLng);
     })
+
     boombox.get('sound').stop();
     boombox.get('sound').play();
 });
