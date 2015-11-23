@@ -1,35 +1,45 @@
-var map;
 var panorama;
+var sv;
 
 function initialize() {
-    if (GBrowserIsCompatible()) {
-        map = new GMap2(document.getElementById("map_canvas"));
-        map.setCenter(new GLatLng(35.659683, 139.742956), 16);
+    var fenway = {
+        lat: 43.472263,
+        lng: 141.8498005
+    };
 
-        var street = new GStreetviewOverlay();
-        map.addOverlay(street);
+    sv = new window.google.maps.StreetViewService();
 
-        var slatlng = new GLatLng(35.659683, 139.742956);
-        var option = {
-            latlng: slatlng
-        };
-
-        var scontainer = document.getElementById("street");
-        panorama = new GStreetviewPanorama(scontainer, option);
-
-        GEvent.addListener(map, "click", moveCenter);
-    }
+    panorama = new google.maps.StreetViewPanorama(
+        $('#street')[0], {
+            position: fenway,
+            pov: {
+                heading: 19,
+                pitch: 10
+            },
+            clickToGo: false,
+            addressControl: false,
+            linksControl: false,
+            scrollwheel: false,
+            panControl: false,
+            zoomControl: false
+        });
 }
 
-function moveCenter(overlay, latlng) {
-    map.panTo(latlng);
-    panorama.setLocationAndPOV(latlng);
-}
 
 $(function() {
-    GUnload();
     $("body").css("height", $(window).height() + 2 + "px");
     $(window).scrollTop(1);
+
+    boombox.setup();
+    var options = {
+        src: [{
+            media: 'audio/mp4',
+            path: 'skate.mp3'
+        }]
+    };
+    boombox.load('sound', options, function(err, audio) {
+    });
+
 });
 
 $(window).on('load', function(event) {
@@ -38,4 +48,10 @@ $(window).on('load', function(event) {
 
 $(window).on('scroll', function(event) {
     $(window).scrollTop(1);
+
+    sv.getPanoramaById(panorama.links[1].pano, function(data) {
+        panorama.setPosition(data.location.latLng);
+    })
+    boombox.get('sound').stop();
+    boombox.get('sound').play();
 });
