@@ -39,7 +39,6 @@ $(function() {
     };
     boombox.load('sound', options, function(err, audio) {
     });
-
 });
 
 $(window).on('load', function(event) {
